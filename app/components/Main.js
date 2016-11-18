@@ -1,28 +1,39 @@
 import React, { Component, PropTypes } from 'react'
+import MobileDetect from 'mobile-detect'
+// Components
+import Desktop from 'Desktop'
+import Phone from 'Phone'
+import Tablet from 'Tablet'
+
 
 class Main extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      greeting: this.props.greeting
+
+  renderByDevice(ua) {
+    const md = new MobileDetect(ua);
+    if (md.phone()) {
+      return <Phone />
+    } else if (md.tablet()) {
+      return <Tablet />
+    } else {
+      return <Desktop />
     }
   }
+
+
 
   render(){
     return(
       <div className="Main">
-        <h1>{this.state.greeting}</h1>
+        {this.renderByDevice(window.navigator.userAgent)}
       </div>
     )
   }
 }
 
-Main.defaultProps = {
-  greeting: "Main component rendered successfully."
-}
+
 
 Main.propTypes = {
-  greeting: PropTypes.string
+  children: PropTypes.any,
 }
 
 export default Main
